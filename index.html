@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mayur & Kajal - Royal Grand Premiere</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Montserrat:wght@300;500;700;900&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: radial-gradient(ellipse at 50% 18%, #2c0c12 0%, #100509 42%, #050203 78%);
+      color: #ffffff;
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding-bottom: 60px;
+      overflow-x: hidden;
+      perspective: 1000px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.2;
+      background-image: repeating-linear-gradient(135deg, transparent 0 34px, rgba(212, 175, 55, 0.035) 35px, transparent 36px 70px);
+      mask-image: linear-gradient(to bottom, #000, transparent 75%);
+    }
+
+    /* Floating Gold Canvas Background */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Bar */
+    .top-nav {
+      width: 100%;
+      max-width: 460px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(5, 2, 3, 0.96), rgba(5, 2, 3, 0.55));
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.16);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      background: linear-gradient(180deg, #fff 0%, #ffd700 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+    }
+
+    .audio-btn {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid #d4af37;
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+      transition: all 0.3s;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 96px 18px 40px;
+      text-align: center;
+      z-index: 2;
+    }
+
+    /* 3D Interactive Card */
+    .hero-3d-card {
+      position: relative;
+      width: 100%;
+      border-radius: 20px;
+      background: linear-gradient(145deg, rgba(48, 9, 16, 0.9), rgba(12, 2, 4, 0.97));
+      border: 1px solid rgba(228, 194, 105, 0.55);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.72), inset 0 0 34px rgba(212, 175, 55, 0.1), 0 0 45px rgba(104, 22, 34, 0.16);
+      padding: 42px 24px;
+      margin-bottom: 30px;
+      transform-style: preserve-3d;
+      transition: transform 0.2s ease-out;
+      backdrop-filter: blur(15px);
+    }
+
+    .hero-3d-card::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+
+    .subtitle-badge {
+      font-family: 'Cinzel', serif;
+      color: #d4af37;
+      letter-spacing: 4px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .main-names {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(3rem, 12vw, 4rem);
+      line-height: 1.12;
+      margin: 12px 0 16px;
+      background: linear-gradient(180deg, #ffffff 0%, #ffd700 60%, #b8860b 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 6px 20px rgba(212, 175, 55, 0.4));
+      transform: translateZ(30px);
+    }
+
+    .tagline {
+      font-size: 0.88rem;
+      color: #e0e0e0;
+      line-height: 1.6;
+      font-weight: 300;
+      transform: translateZ(20px);
+      max-width: 350px;
+      margin-inline: auto;
+    }
+
+    /* Real 3D Envelope */
+    .envelope-stage {
+      perspective: 1200px;
+      width: 100%;
+      margin: 25px 0 55px 0;
+    }
+
+    .envelope-3d {
+      position: relative;
+      width: 100%;
+      height: 245px;
+      background: linear-gradient(135deg, #59070f 0%, #2b0206 100%);
+      border-radius: 14px;
+      border: 1px solid rgba(212, 175, 55, 0.7);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.95);
+      cursor: pointer;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 55%;
+      background: linear-gradient(145deg, #8c1723, #57070f);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 3;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.8));
+    }
+
+    .gold-seal {
+      position: absolute;
+      top: 90px; left: 50%;
+      transform: translateX(-50%);
+      width: 65px; height: 65px;
+      background: radial-gradient(circle, #fff2a8, #d4af37 60%, #785200 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-weight: 900;
+      font-size: 0.75rem;
+      color: #210104;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.9);
+      z-index: 4;
+      border: 2px solid #ffffff;
+    }
+
+    .invitation-letter {
+      position: absolute;
+      top: 12px; left: 4%;
+      width: 92%;
+      background: linear-gradient(180deg, #ffffff 0%, #f7efe1 100%);
+      color: #1a0105;
+      padding: 25px 20px;
+      border-radius: 12px;
+      transition: transform 0.8s ease, opacity 0.8s ease;
+      z-index: 1;
+      opacity: 0;
+      border: 2px solid #d4af37;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    }
+
+    .envelope-3d.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
+    .envelope-3d.open .invitation-letter { transform: translateY(-190px); z-index: 5; opacity: 1; }
+
+    /* Scratch Reveal Card */
+    .glass-box {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
+      border-radius: 10px;
+      padding: 22px 18px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(212, 175, 55, 0.32);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+    }
+
+    .card-label {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      color: #ffd700;
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .scratch-wrapper {
+      position: relative;
+      width: 100%;
+      height: 145px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid #d4af37;
+    }
+
+    .scratch-reveal {
+      position: absolute;
+      width: 100%; height: 100%;
+      background: #1e0306;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.6;
+    }
+
+    canvas { position: absolute; top: 0; left: 0; z-index: 3; touch-action: none; }
+
+    /* Timer */
+    .countdown-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .time-card {
+      background: linear-gradient(145deg, rgba(89, 7, 15, 0.4), rgba(10, 2, 4, 0.8));
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      padding: 12px 5px;
+      border-radius: 10px;
+      flex: 1;
+    }
+
+    .time-card span {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      display: block;
+    }
+
+    .time-card label {
+      font-size: 0.65rem;
+      color: #ccc;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Royal Action Buttons */
+    .btn-gold {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #d4af37 0%, #aa820a 100%);
+      color: #000;
+      text-decoration: none;
+      font-weight: 800;
+      border: 1px solid rgba(255, 231, 160, 0.55);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      margin-top: 15px;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.35);
+      letter-spacing: 0.5px;
+      transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, #168a68 0%, #075b49 100%);
+      color: #fff;
+      border-color: rgba(138, 232, 196, 0.5);
+      box-shadow: 0 8px 25px rgba(17, 126, 94, 0.28);
+    }
+
+    @media (max-width: 380px) {
+      .top-nav { padding-inline: 14px; }
+      .brand-title { font-size: 1rem; letter-spacing: 1.4px; }
+      .audio-btn { padding: 8px 11px; }
+      .hero-3d-card { padding-inline: 18px; }
+      .subtitle-badge { letter-spacing: 2.5px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="top-nav">
+    <div class="brand-title">GRAND INVITATION</div>
+    <button class="audio-btn" onclick="toggleAudio()" id="audioBtn">🎵 PLAY MUSIC</button>
+  </div>
+
+  <audio id="royalAudio" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-wedding-113884.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+    
+    <!-- 3D Interactive Main Card -->
+    <div class="hero-3d-card" id="tiltCard">
+      <div class="subtitle-badge">ROYAL CELEBRATION</div>
+      <div class="main-names">Mayur & Kajal</div>
+      <p class="tagline">
+        "Two souls with but a single thought, two hearts that beat as one. Request the pleasure of your company on our special day."
+      </p>
+    </div>
+
+    <!-- 3D Envelope -->
+    <div class="envelope-stage">
+      <div class="envelope-3d" id="envelope">
+        <div class="envelope-flap"></div>
+        <div class="gold-seal">OPEN</div>
+        <div class="invitation-letter">
+          <h3 style="color: #59070f; font-size: 1.5rem; font-family: 'Cinzel', serif;">Formal Invitation</h3>
+          <p style="font-size: 0.88rem; margin-top: 10px; color: #222; line-height: 1.5;">
+            We cordially invite you to share our joy and grace the auspicious occasion of our wedding celebration.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scratch Card Details -->
+    <div class="glass-box">
+      <div class="card-label">✨ EVENT DETAILS (SCRATCH TO REVEAL)</div>
+      <div class="scratch-wrapper">
+        <div class="scratch-reveal">
+          <strong style="color: #ffd700; font-size: 1.2rem;">📅 6th December 2026</strong>
+          <p style="font-weight: 700; margin-top: 4px;">📍 Akshar Party Plot</p>
+          <span style="font-size: 0.85rem; color: #bbb;">Paliyad Road, Botad</span>
+        </div>
+        <canvas id="scratchCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Live Countdown Timer -->
+    <div class="glass-box">
+      <div class="card-label">⏳ COUNTDOWN TO CELEBRATION</div>
+      <div class="countdown-grid">
+        <div class="time-card"><span id="days">00</span><label>Days</label></div>
+        <div class="time-card"><span id="hours">00</span><label>Hours</label></div>
+        <div class="time-card"><span id="mins">00</span><label>Mins</label></div>
+        <div class="time-card"><span id="secs">00</span><label>Secs</label></div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <a href="https://maps.google.com/?q=Akshar+Party+Plot+Paliyad+Road+Botad" target="_blank" class="btn-gold">
+      📍 Navigate To Venue (Google Maps)
+    </a>
+    <a href="https://wa.me/917600221010?text=Congratulations%20Mayur%20%26%20Kajal!%20I%20will%20definitely%20attend%20your%20wedding." target="_blank" rel="noopener noreferrer" class="btn-gold btn-green">
+      💬 Send RSVP / Wishes on WhatsApp
+    </a>
+
+  </div>
+
+  <script>
+    // 3D Tilt Effect on Main Card
+    const card = document.getElementById('tiltCard');
+    document.addEventListener('mousemove', (e) => {
+      const x = (window.innerWidth / 2 - e.pageX) / 25;
+      const y = (window.innerHeight / 2 - e.pageY) / 25;
+      card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+    });
+
+    // Gold Floating Particles
+    const pCanvas = document.getElementById('bg-canvas');
+    const pCtx = pCanvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      pCanvas.width = window.innerWidth;
+      pCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * pCanvas.width;
+        this.y = Math.random() * pCanvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedY = Math.random() * 0.5 + 0.2;
+        this.opacity = Math.random() * 0.7 + 0.2;
+      }
+      update() {
+        this.y -= this.speedY;
+        if (this.y < 0) {
+          this.y = pCanvas.height;
+          this.x = Math.random() * pCanvas.width;
+        }
+      }
+      draw() {
+        pCtx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+        pCtx.beginPath();
+        pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        pCtx.fill();
+      }
+    }
+
+    for (let i = 0; i < 45; i++) particles.push(new Particle());
+
+    function renderParticles() {
+      pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(renderParticles);
+    }
+    renderParticles();
+
+    // Audio Play/Pause
+    const audio = document.getElementById('royalAudio');
+    const audioBtn = document.getElementById('audioBtn');
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play();
+        audioBtn.innerHTML = '⏸ PAUSE MUSIC';
+      } else {
+        audio.pause();
+        audioBtn.innerHTML = '🎵 PLAY MUSIC';
+      }
+    }
+
+    // Envelope Click
+    const envelope = document.getElementById('envelope');
+    envelope.addEventListener('click', () => {
+      envelope.classList.toggle('open');
+    });
+
+    // Scratch Card Canvas
+    const canvas = document.getElementById('scratchCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function setupScratch() {
+      canvas.width = canvas.parentElement.offsetWidth;
+      canvas.height = canvas.parentElement.offsetHeight;
+
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, '#ffd700');
+      gradient.addColorStop(0.5, '#b8860b');
+      gradient.addColorStop(1, '#d4af37');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#1a0105';
+      ctx.font = 'bold 14px Montserrat';
+      ctx.textAlign = 'center';
+      ctx.fillText('✨ SCRATCH HERE TO REVEAL ✨', canvas.width / 2, canvas.height / 2 + 5);
+    }
+    setupScratch();
+
+    let isDrawing = false;
+    function scratch(e) {
+      if (!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, 22, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    canvas.addEventListener('mousedown', () => isDrawing = true);
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mousemove', scratch);
+    canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+    canvas.addEventListener('touchend', () => isDrawing = false);
+    canvas.addEventListener('touchmove', scratch);
+
+    // Live Countdown
+    const eventDate = new Date('December 6, 2026 00:00:00').getTime();
+    setInterval(() => {
+      const now = new Date().getTime();
+      const diff = eventDate - now;
+
+      if (diff > 0) {
+        document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+        document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById('mins').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById('secs').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
